@@ -1,0 +1,15 @@
+digraph pipeline {
+
+// font
+graph [fontname = "Segoe UI"];
+node [fontname = "Segoe UI"];
+edge [fontname = "Segoe UI"];
+
+"scripts" -> "app";
+"app" -> "engine"; "engine" [shape = "box"];
+"engine" -> "runtime"; "runtime" [shape = "box"];
+"runtime" -> "driver (user)"; "driver (user)" [shape = "box"];
+"driver (user)" -> "driver (kernel)"; "driver (kernel)" [shape = "hexagon"];
+"driver (kernel)" -> "driver manager (kernel)"; "driver manager (kernel)" [shape = "hexagon"];
+
+}
