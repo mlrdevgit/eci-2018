@@ -2,7 +2,13 @@
 
 ## Contenido
 
-## Preparado
+El material está armado a partir de archivos de texto plano, con formato en markdown.
+
+Pueden leerlo directamente, o pueden utilizar los scripts dentro de `utils` para armar la presentación.
+
+## Preparado de presentación
+
+
 
 ## Preguntas
 
