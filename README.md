@@ -29,19 +29,22 @@ Y lo que no llegamos a cubrir el lunes.
 - [Geometría](geometria.md)
 - [Transformaciones](transform.md)
 - [Arquitectura de ejemplo: GCN](gcn.md)
-- [Memoria y cachés](caches.md)
-- [Modelos de programación](elementos-prog.md)
-- [Performance Intro](performance-intro.md)
-- [Performance](performance.md)
-- [Dispositivos Móbiles](mobile.md)
 - [Unidades programables](programables.md)
 - [Unidades de función fijas](fijas.md)
+- [Memoria y cachés](caches.md)
+- [Performance Intro](performance-intro.md)
 
 
 ### Miércoles
 
 Representaciones aproximadas de realidad, física y arte.
 
+- [Representaciones](representaciones.md)
+- [Animación](animacion.md)
+- [Modelos de programación](modelos-prog.md)
+- [Color](color.md)
+- [Performance](performance.md)
+- [Dispositivos Móbiles](mobile.md)
 
 ### Jueves
 
@@ -58,7 +61,7 @@ Aplicación a rendering: técnicas, color, etc.
 Los siguientes scripts pueden utilizarse para armar la presentación, incluyendo dependencias en contenido externo.
 
 - `external\download.py`: baja imágenes y videos, arma clips
-- `utils\presentaicon.py`: arma la presentación (asumiendo que corrió download) con algún contenido particular, y la ejecuta
+- `utils\presentacion.py`: arma la presentación (asumiendo que corrió download) con algún contenido particular, y la ejecuta
 
 Para conseguir todo el software, pueden utilizar algo como [Chocolatey](https://chocolatey.org/). Por ejemplo, una vez disponible, desde una consola de administración, pueden correr los siguientes comandos.
 
