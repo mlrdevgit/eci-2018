@@ -41,14 +41,20 @@ Representaciones aproximadas de realidad, física y arte.
 
 - [Representaciones](representaciones.md)
 - [Animación](animacion.md)
-- [Modelos de programación](modelos-prog.md)
-- [Color](color.md)
-- [Performance](performance.md)
-- [Dispositivos Móbiles](mobile.md)
+
 
 ### Jueves
 
 Aplicación a aprendizaje de máquina: redes neuronales, inferencia, entrenamiento.
+
+- [Aprendizaje de máquina](ml.md)
+- [Frameworks](frameworks.md)
+- [Inferencia](eval.md)
+- [Entrenamiento](training.md)
+- [Performance](performance.md)
+- [Dispositivos Móbiles](mobile.md)
+- [Modelos de programación](modelos-prog.md)
+- [Color](color.md)
 
 
 ### Viernes
