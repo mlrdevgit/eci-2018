@@ -1,0 +1,297 @@
+-*- mode: org; coding: utf-8 -*-
+
+* Entrenamiento
+
+** Ejemplo
+
+Instalar Python (3)
+pip3 install --upgrade pip
+pip3 install --upgrade jupyter matplotlib numpy pandas scipy scikit-learn
+pip3 install --upgrade sklearn-pandas
+pip3 install --upgrade category_encoders
+jupyter notebook
+
+- o -
+
+Instalar Anaconda
+Ejecutar icono de Jupyter Notebook
+Buscar projects/2018 y crear un nuevo Notebook.
+
+Buscamos algo en dataportals.org
+https://data.buenosaires.gob.ar/dataset/arbolado-en-espacios-verdes
+
+print("this is python!") [shift+Enter]
+
+import pandas as pd
+arboles = pd.read_csv(r"C:\Users\Marcelo\Downloads\arbolado-en-espacios-verdes.csv")
+arboles.head()
+
+error!
+
+import pandas as pd
+arboles = pd.read_csv(r"C:\Users\Marcelo\Downloads\arbolado-en-espacios-verdes.csv", sep=";")
+arboles.head()
+
+Aca podemos examinar algunas de las columnas y ver que tipo de datos tenemos.
+
+arboles.info()
+
+Vemos que de vuelta las comas nos atacan, pero en este caso no nos calienta, porque vamos a trabajar con diametro.
+
+arboles = pd.read_csv(r"C:\Users\Marcelo\Downloads\arbolado-en-espacios-verdes.csv", sep=";", decimal=',')
+arboles.head()
+
+Notes que faltan algunos valores de ubicacion.
+
+Si queremos ver que tipos de arboles hay con nombre comun, podemos examinar solo eso.
+
+arboles["NOMBRE_COM"].value_counts()
+
+Miren los datos porque pueden encontrar cosas raras. Gran parte del trabajo de machine learning is la preparacion de datos, o 'data wrangling'.
+
+Actividades típicas de data wrangling son:
+
+- Extracción
+- Parsing
+- Joining
+- Estandarización
+- Augmenting (agregando de otro lado o referencias, o detallando)
+- Limpieza
+- Consolidación
+- Filtrado
+- Generación de datos derivados
+
+Hay dos preguntas de aplicación interesantes para hacer. Primero, si mido el diámetro de un árbol, qué altura va a tener. Segundo, como no sé nada de árboles, puedo medir el diámetro y tener una idea de qué especie pueden ser?
+
+Para datos continuos, hay otro tipo de preguntas que hago.
+
+arboles.describe()
+
+Noten que la herramienta se equivoca y trata 'ID_ARBOL' y el de especie como un valor numérico en vez de discreto.
+
+Noten la diferencia entre 'mean' y la mediana. El promedio está por arriba de la mediana, con lo cual hay árboles más altos que me están tirando el promedio hacia arriba. Sin embargo, los datos también son medio sospechosos porque hay altura cero, lo cual no suena razonable.
+
+arboles[arboles.ALTURA_TOT == 0].head()
+
+Hay tres arboles unicamente. Que hay de los mas altos?
+
+arboles.sort_values(by="ALTURA_TOT",ascending=False).head()
+
+Hay varios en ese rango, con lo cual probablemente sea en decimetros. Sigamos el ejercicio asumiendo eso. Diametro debe ser entonces en decimetros de la copa. De nuevo, saber algo del area ayuda.
+
+Quitemos entonces los arboles mas bajos.
+
+arboles = arboles[arboles.ALTURA_TOT != 0]
+
+Noten que sobreescribi una variable, con lo cual puedo subir y reevaluar .describe(), pero tambien es destructivo y tengo que pensar si tuve diferencias. Para hacer las cosas mas claras y evitar errores en el notebook, sin embargo, me puede convenir usar un nuevo nombre (y de ultima asignar None a la variable anterior si quiero liberar la memoria - describe dice cuanto ocupa).
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+arboles.hist(bins=50, figsize=(20,15))
+plt.show() <- opcional
+
+¿Por qué 50 bins? Lo saqué del bonete. Pero existen modelos de aprendizaje de máquina para hacer clustering, que justamente podría ayudar a amuchar los datos.
+
+Piensen un momento en esto, es uno de las categorizaciones clásicas, supervisado o no supervisado. En los casos supervisados, los datos de aprendizaje tienen la solución, ej tipo de árbol y su altura. Otro ejemplo es el de clasificación, donde digo si un mail es o no es spam; o el de predecir un número o rango a partir de features (o predictores), que llamamos regresión. Las redes neuronales son supervisadas.
+
+En los casos no supervisados, no tengo un valor con una respuesta esperada, sino simplemente valores donde el sistema tiene que aprender sin guía. Por ejemplo tenemos algoritmos de clustering (k-Means, expectation maximization), visualización y reducción de dimensionalidad (principal component analysis), o aprendizaje de reglas de asociación (apriori).
+
+Ejemplo de apriori: siempre que aparece 'a', también aparece 'b'; el 50% de los casos de 'a' y 'b', aparece 'c'. Se usa por ejemplo para analizar shopping carts ("los que compraron esto, también compraron ...").
+
+Ejemplo de PCA: hay tres variables x,y,z, pero x e y tienen alta correlación, y podemos transformar este espacio en otro espacio j,k,l donde j es el que tiene más variación, seguido de k, seguido de l, donde l aporta mínima variación ('j' y 'k' son los componentes principales).
+
+Ahora vamos a preparar el dataset para entrenamiento, incluyendo sacar pruebas. Es importante hacer esto para poder probar cómo funcionan nuestros modelos, y para evitar overfitting, donde tenemos un modelo muy complicado que encaja muy bien con los datos pero no generaliza bien a nuevos datos.
+
+En principio, hay que elegir al azar parte de los datos, por ejemplo 20%, y apartarlo. Es importante no mirar qué datos hay ahí ("data snooping"), porque podemos identifir un patrón que nos influya (y seguramente va a haber patrones, aunque sean accidentales).
+
+Vamos a utilizar un model de random sampling sencillo, aunque vale la pena mencionar que no es siempre la decisión correcta. A veces en datasets hay diferencias importantes donde hay poblaciones mezcladas, por ejemplo hombre o mujer a preguntas de encuestas, y si queremos estimar la población total, tenemos que estratificar nuestro sampling de forma que refleje las proporciones en la población, por ejemplo con más mujeres que hombres en la proporción correcta, de lo contrario existe la posibilidad de introducir bias que importa.
+
+from sklearn.model_selection import train_test_split
+train_set, test_set = train_test_split(arboles, test_size=0.2, random_state=38)
+
+(si tienen problemas con alguno de estos importa, ojo que sklearn puede no estar, y que puede depender de si estan corriendo en 32 o 64 bits).
+
+Podemos ver rapido como quedaron los valores:
+
+train_set.hist(bins=50, figsize=(20,15))
+test_set.hist(bins=50, figsize=(20,15))
+
+trabajo = train_set.copy()
+
+Para hacer una visualización rápida de datos geográficos, podemos utilizar un scatterplot.
+
+trabajo.plot(kind='scatter', x='X', y='Y')
+
+Como se amuchan los puntos en algunos lugares, podemos ver concentraciones dandole alpha.
+
+trabajo.plot(kind='scatter', x='X', y='Y', alpha='0.1')
+
+corr_mat = trabajo.corr()
+corr_mat
+
+En la matriz de correlación, vemos lo que esperamos: una diagonal de unos, y la altura fuertemente correlacionada con el diámetro. Vean la simetría - la correlación no tiene dirección. Interesante tal vez que la inclinación no correlaciona con la altura ni el diámetro - son independientes.
+
+También podemos pedir plots de correlación (un plot por correlación, así que esta vez nos gasstamos en seleccionar).
+
+from pandas.tools.plotting import scatter_matrix
+scatter_matrix(trabajo[ ["ALTURA_TOT", "DIAMETRO", "INCLINACIO" ] ], figsize=(12, 8))
+
+Noten que en la diagonal tenemos histogramas.
+
+Hay muchas concentraciones de puntos, ajustemos un poco.
+
+scatter_matrix(trabajo[ ["ALTURA_TOT", "DIAMETRO", "INCLINACIO" ] ], figsize=(12, 8), alpha=0.05)
+
+Noten que diametro y altura van aumentando juntos.
+
+Bueno, vamos a empezar a trabajar con los datos. Como me interesa altura, lugar y especie, vamos a sacar cosas que no queremos: ID_ARBOL, ID_ESPECIE, NOMBRE_FAM (porque no se nada de botanica), NOMBRE_GEN, ORIGEN, COORD_X, COORD_Y (derivadas de X e Y pero con otro formato).
+
+# hay problemas de categorizar strings, con lo cual me quedo con ID_ESPECIE por ahora
+trabajo = trabajo.drop(["ID_ARBOL", "NOMBRE_FAM", "NOMBRE_GEN", "ORIGEN", "COORD_X", "COORD_Y"], axis=1)
+
+Ahora, a la mayoria de los algoritmos no les gusta trabajar con etiquetas, asi que los convertidos en vectores con un unico valor asignado, 'one hot encoder'.
+
+from sklearn.preprocessing import LabelEncoder
+encoder = LabelEncoder()
+nombre_cat = trabajo["NOMBRE_COM"]
+nombre_cat_encoded = encoder.fit_transform(nombre_cat)
+print(nombre_cat_encoded)
+print(encoder.classes_)
+
+from sklearn.preprocessing import OneHotEncoder
+ohencoder = OneHotEncoder()
+nombre_cat_oh = ohencoder.fit_transform(nombre_cat_encoded.reshape(-1,1))
+nombre_cat_oh
+
+Vean que el resultado es un 'sparse matrix' de 41199 por 323 (instancias por categorias), con 41199 valores en uno (es decir, un nombre por arbol).
+
+Hay otra clase, LabelBinarizer, que hace los dos pasos en uno.
+
+Noten que usamos fit_transform. scikit tiene varias clases que son transformadores, y todos implementan tres metodos: fit, transform, y fit_transform. Los estimadores también tienen un método fit. fit observa datos para aprender parámetros, y transform aplica esos parámetros a nuevos datos. Cuando se va a hacer la transformación sobre los mismos datos (por ejemplo, porque vamos a aprender sobre categorías y reemplazarlas por un número), fit_transform puede ser más eficiente.
+
+Los parámetros sobre las clases en sí son hiperparámetros - son valores de configuración sobre los algoritmos.
+
+Muchos algoritmos necesitan datos de distintas dimensiones en una escala similar para funcionar bine. Ajustar es 'scaling'. Las dos formas clásicas son min-max scaling (o normalización), donde pasamos todo al rango cero a uno, restando el mínimo a todos los valores y dividiendo por máximo menos mínimo. MinMaxScaler hace este trabajo.
+
+Estandarización es distinto, donde sustraemos la media de todos los valores (con lo cual la media es cero), y dividimos por variancia. No hay un rango particular (lo cual es más choto), pero al menos evitamos que un valor extremo distorcione todo los rangos de valores.
+
+scikit también permite poner todos los pasos en un objetos de Pipeline. Toma pares de nombres y estimadores que implican una secuencia. Cuando se invoca .fit() en el pipeline invoca fit_transform() en cada estimador, y fit() en el último; invocar .transform() en el pipeline invoca transform en todos, y fit_transform hace la secuencia esperada. Van cosas como Imputer tambien.
+
+Ahora tenemos las herramientas para preparar los datos que vamos a usar para la primer pregunta, estimar altura midiendo el diámetro. Vamos a estimar con un modelo de linear regression. Para eso, vamos a sacar de panda frames a arrays de numpy.
+
+from sklearn.linear_model import LinearRegression
+modelo = LinearRegression()
+modelo.fit(trabajo["DIAMETRO"].values.reshape(-1, 1), trabajo["ALTURA_TOT"].values.reshape(-1, 1))
+
+Hay que hacer reshapes en este caso porque la expectativa es tener varios features, pero acá solo tengo diámetro y altura como valores de una única dimensión, y la combinación lineal es muy simple. Con el modelo, puedo predecir
+
+Acá hay algunos datos
+
+trabajo
+
+Vamos a ver si la predicción más o menos funciona.
+
+from numpy import array
+modelo.predict(array([25]).reshape(-1,1))
+
+Como todo, hay clases para ayudar, pueden correr el modelo para calcular el error cuadrado en los datos de test.
+
+** Configuración de otros paquetes
+
+Un buen VM ayuda mucho a no tener que pasar tanto tiempo configurando cosas.
+
+Una de las cosas que ofrece Azure es un 'Data Science VM', posiblemente con Machine Learning, que tiene varios paquetes configurados, viene en versión Windows y Linux con algunas pequeñas variaciones (ej, si tiene .NET Framework), y probado, incluyendo los SKUs de Azure GPU (con lo cual consiguen aceleración).
+
+** Cognitive Toolkit (CNTK)
+
+Vamos a hacer un ejemplo de redes neuronales con aceleración de GPU, para esto vamos a usar CNTK.
+
+pip3 install cntk-gpu
+
+Pueden ver que se haya instalado bien:
+python -c "import cntk; print(cntk.__version__)"
+
+Pueden bajarse samples y tutoriales:
+python -m cntk.sample_installer
+
+Si se prende fuego:
+https://cntk.ai/Samples/CNTK-Samples-2-5-1.zip
+
+requirements.txt:
+- h5py>=2.6.0 -- HDF5 -- manejo de datos distribuidos
+- jupyter>=1.0.0
+- matplotlib>=1.5.3
+- pandas>=0.19.1
+- pandas-datareader>=0.2.1
+- pillow>=3.4.2 -- proceso de imagenes
+- pip>=8.1.2 -- el instalador
+- seaborn>=0.7.1 -- visualization library (high level para stats, disenio y conocimiento de linear reg, matrices)
+- six>=1.10.0 -- libreria para ayudar con Python 2.6 y 3
+- gym>=0.5.2 -- reinforcement learning
+
+NVIDIA CUDA 9.0 (Sep 2017)
+
+Instalando los tutoriales y configurando.
+
+C:\Users\Marcelo\Downloads\CNTK-Samples-2-5-1\Tutorials\NumpyInterop> python FeedForwardNet.py 
+Si corro python FeedForwardNet.py de forma normal, levanta un poco de GPU.
+Si modifico el archivo para usar CPU, no usa GPU pero duplica CPU.
+
+Es importante verificar que estén uitilizando el recurso correcto!
+
+https://cntk.ai/pythondocs/index.html
+
+Vamos a aprovechar para analizar el ejemplo.
+
+Este ejemplo es de feedforward, es decir, el modelo está armado a partir de capas de neuronas que, al momento de evaluación, cada una simplemente pasan toda su entrada a cada una de las neuronas de la siguiente capa hasta que llega al output. Las conexiones sin embargo tienen distinta fuerza o peso; estos coeficientes son los que codifican el comportamiento de la red.
+
+Hay dos etapas en el uso de una red feedforward: primero aprendizaje, luego evaluación.
+
+La red utiliza un algoritmo de aprendizaje supervisado, es decir, los datos de entradas tienen que tenar las clasificaciones esperadas al momento de entrenar. Las últimas unidades corresponden a categorías; comparamos el valor que tenemos con el esperado, y recorremos la red hacia atrás ajustando coeficientes para que estén más cerca del valor deseado y más lejos de valores indeseados. Este paso se llama normalmente 'backpropagation'.
+
+Cada vez que presentamos todo el conjunto de datos a la red, realizamos un 'epoch'. Eventualmente, después de varios 'epochs', la idea es que la red aprenda a recordar estos patrones de entradas-categorías. Con buen viento, va a generalizar incluso a cosas que no ha visto antes. Estas "esperanzas" son parciales - no hay garantías de converger, ni la realidad presenta entradas que sean perfectamente desambiguables.
+
+La etapa de clasificación es cuando ya está el modelo listo - es lo que nos referimos antes como inferencia. El modelo normalmente no se toca, aunque uno también puede elegir tomar nuevos ejemplos como casos válidos para aprender al vuelo (el problema es que aprender de forma que importe es mucho más caro que inferir).
+
+Veamos como se arma el modelo de feedforward, siguiendo el codigo.
+
+La función principal es ffnet, que va a crear un modelo. Primero genera dos variables de entrada, una 2D de f32 y otra de las clasificaciones, (2) f32.
+
+input_variable es una operación que marca la entrada de un modelo, done el primer argumento es un número o tupla con la forma del tensor. En estos casos, un vector con dos entradas y dos salidas.
+
+Sequential encadena funciones, generando dos capas de 50 nodos con una función sigmoid, y las dos clases de output, y la aplica al feature en la variable netout.
+
+cross_entropy_with_softmax es del paquete de Python de CNTK que se utiliza para media el 'cross entropy' entre la salida del model y la distribución. Cross entropy es una medida de cuántos bits necesitás para encodear un evento en una distribución de probabilidad cuando la distribución de probabilidad real es otra. softmax es una función que toma un vector de valores y devuelve un vector de valores tal que están todos entre 0 y 1 y suman 1 - útil para distribuciones de categorías (aunque no podés decir "no sé" sin entrenar para ello).
+
+softmax sólo aplica a netout, no a las entradas.
+
+classification_error es una función de CNTK que se fija cuál es el valor más probable, y lo compara contra el valor esperado (donde la clasificación es one-hot-bit).
+
+sgd es stochastic gradient descent, que se utiliza para buscar solución. Toma los parámetros a ajustar, que son los de la salida (netout termina con la salida). Tiene varios hiperparámetros.
+
+Luego vamos a generar 1000 datos al azar y entrenar con train_minibatch.
+
+Cambiando el tamaño del problema a 10 capas escondidad y 1000 neuronas por capa, hace diferencia CPU vs GPU, donde tengo 35 vs. 15 segundos.
+
+De nuevo, tengan cuidado con qué tipo de hardware utilizan para correr!
+
+La función de activación sigmoid es una curva de 0 a 1 (o -1 a 1), y normalmente puede utilizarse para modelar procesos que 'arrancan' despacio, aumentan con velocidad, y luego van a desacelerando a medida que llegan a un límite.
+
+Pero así y todo, parece baja la utilización de GPU. Veamos qué pasa.
+
+** NVidia Profiler
+
+Instalo NVIDIA CUDA 9, desde Start voy al profiler.
+
+Pongo python.exe como ejecutabe (el 3), y el script como parámetro - asegurándomde de que corra con GPU.
+
+Tengo aproxiamadamente 1 segundo de overhead de reloj.
+
+Hay mucho tráfico de memoria!! Pueden ser esos 1000 minibatches. Convendría agrandarlos, y tal vez encolarlos de antemano en el proceso.
+
+El analisis lleva un minuto o algo por el estilo e indica:
+- low memcpy/compute overlap; recomendación - asynchronous and overlapping transfers with computation
+- low kernel concurrency; recomendación - utilizar streams independientes
+- low memcpy throughput; recomendación - usar pinned memory - ¿qué es? memoria que no puede ser paginada por el sistema (y probablemente muy bien alineada)
+
+
