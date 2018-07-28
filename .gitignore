@@ -22,3 +22,7 @@ bld/
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Quita archivos externos
+external/*
+!external/download.*

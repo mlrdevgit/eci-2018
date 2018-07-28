@@ -12,6 +12,42 @@ import shutil
 target_dir = os.path.dirname(os.path.abspath(__file__))
 
 downloads = [
+    ("escenas-mgs-suciedad.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/40_dirt_after.jpg"),
+    ("escenas-mgs-profundidad.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/35_dof_compose.png"),
+    ("escenas-mgs-particulas.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/23_particles_3.jpg"),
+    ("escenas-mgs-ssr.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/20_ssr_color.jpg"),
+    ("escenas-mgs-trans.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/18_transparent.jpg"),
+    ("escenas-mgs-luces-2.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/14_shadow_diffuse_4.jpg"),
+    ("escenas-mgs-shadow-maps.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/13_shadowmap.jpg"),
+    ("escenas-mgs-luces-1.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/12_nonshadow_diffuse_4.jpg"),
+    ("escenas-mgs-gi.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/10_sh_diffuse_4.jpg"),
+    ("escenas-mgs-ssao.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/08_ssao.jpg"),
+    ("escenas-mgs-vels.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/05_velocity_fin.jpg"),
+    ("escenas-mgs-vel.png", "http://www.adriancourreges.com/img/blog/2017/mgsv/05_velocity_dyn.png"),
+    ("escenas-mgs-gbuffer.png", "http://www.adriancourreges.com/img/blog/2017/mgsv/04_gbuffer_format.png"),
+    ("escenas-piso.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/02_depth_pp_3.jpg"),
+    ("escenas-heightmap.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/01_heightmap.jpg"),
+    ("escenas-mgs.jpg", "http://www.adriancourreges.com/img/blog/2017/mgsv/99_final.jpg"),
+    ("escenas-forward-plus.jpg", "https://www.3dgep.com/wp-content/uploads/2015/08/Forward-.jpg"),
+    ("escenas-deferred-buffers.png", "https://cdn.tutsplus.com/gamedev/uploads/2013/10/buffers.png"),
+    ("escenas-deferred.png", "https://cdn.tutsplus.com/gamedev/uploads/2013/11/deferred-v2.png"),
+    ("escenas-forward.png", "https://cdn.tutsplus.com/gamedev/uploads/2013/11/forward-v2.png"),
+    ("barrel.jpg", "https://actioncamguides.com/wp-content/uploads/2017/05/epaperpress.jpg"),
+    ("pincushion.jpg", "https://sjcam.com/wp-content/uploads/2017/09/Distortion-Correction-1-1024x808.jpg"),
+    ("fisheye.png", "https://www.khaolakexplorer.com/similan-islands-liveaboard/wp-content/uploads/2016/08/fish-eye-vs-rectilinear.jpg"),
+    ("projection-transform.png", "https://docs.microsoft.com/en-us/windows/desktop/direct3d9/images/cuboid.png"),
+    ("view-transform.png", "https://msdn.microsoft.com/dynimg/IC412715.png"),
+    ("world-transform.png", "https://msdn.microsoft.com/dynimg/IC412718.png"),
+    ("escenas-forward.png", "https://cdn.tutsplus.com/gamedev/uploads/2013/11/forward-v2.png"),
+    ("camaras-frustum.jpg", "https://upload.wikimedia.org/wikipedia/commons/3/30/ViewFrustum.jpg"),
+    ("meshes-unreal-level.png", "https://docs.unrealengine.com/portals/0/images/Engine/LevelStreaming/Overview/PersistentLevel.png"),
+    ("meshes-konigsberg.png", "https://upload.wikimedia.org/wikipedia/commons/5/5d/Konigsberg_bridges.png"),
+    ("meshes-winged.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b7/Mesh_we2.jpg"),
+    ("meshes-ff7-real.jpg", "http://i.imgur.com/oJJkl.jpg"),
+    ("meshes-ff7.jpg", "https://www.technobuffalo.com/wp-content/uploads/2015/06/Final-Fantasy-VII1.jpg"),
+    ("meshes-dolphin.png", "https://upload.wikimedia.org/wikipedia/commons/f/fb/Dolphin_triangle_mesh.png"),
+    ("meshes-chichen-itza.jpg", "https://upload.wikimedia.org/wikipedia/commons/5/51/Chichen_Itza_3.jpg"),
+    ("caffe2-operators-comparison.png", "https://caffe2.ai/static/images/operators-comparison.png"),
     ("frameworks-coremltrain.png", "https://docs-assets.developer.apple.com/published/692e733304/4eaa95da-421f-4812-8938-2bada720444e.png"),
     ("ml-canny.jpg", "https://docs.opencv.org/trunk/canny1.jpg"),
     ("ml-histograma-4.jpg", "https://docs.opencv.org/2.4/_images/Histogram_Equalization_Equalized_Histogram.jpg"),
@@ -127,7 +163,9 @@ video_clips = [
     ("https://www.youtube.com/watch?v=fbfaBJ4nOBI", "warcraft", "walk", 30, 48),
     ("https://www.youtube.com/watch?v=HdfAzUXvmOQ", "piano-mover", "first", 50, 80),
     ("https://www.youtube.com/watch?v=eDk4HrEtGrM", "saccadic-redirection", "", 0, 0),
-    ("https://www.youtube.com/watch?v=snSbguhHCic", "rise-tr", "adaptacion", 1310, 1370)
+    ("https://www.youtube.com/watch?v=snSbguhHCic", "rise-tr", "adaptacion", 1310, 1370),
+    ("https://www.youtube.com/watch?v=KieoxDq4Xak", "simplygon-remeshing", "", 0, 0),
+    ("https://www.youtube.com/watch?v=Zq5mrApE98A", "mgs-buffers", "", 0, 0)
     ]
 
 def download_clip(url, local_name, local_name_clip, start_time, end_time):
