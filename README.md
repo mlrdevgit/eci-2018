@@ -7,6 +7,8 @@ El material está armado a partir de archivos de texto plano, con formato en mark
 
 Pueden leerlo directamente, o pueden utilizar los scripts dentro de `utils` para armar la presentación.
 
+Si quieren ver las fórmulas que aparecen como `$ ... $` pueden verlas en la presentación o pegando el contenido en [AsciiMath](http://www.asciimath.org/).
+
 
 ### Lunes
 
