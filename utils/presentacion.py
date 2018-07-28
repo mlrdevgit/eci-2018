@@ -72,25 +72,31 @@ def setup():
         "performance-intro",
     ]
     wed_files_to_copy = [
+        # miercoles
         "intro2",
         "representaciones",
         "animacion",
-        "color",
-        "performance-intro",
-        "elementos-prog"
     ]
     thu_files_to_copy = [
+        # jueves
         "ml",
-        "eval",
         "frameworks",
-        "training",
-        "performance",
-        "mobile"
+        "eval",
+        "modelos-prog",
+        "color"
         ]
     fri_files_to_copy = [
+        # viernes
+        "vcpkg",
+        "performance",
+        "meshes",
+        "camaras",
+        "mobile",
+        "escenas",
+        "tp"
         ]
-    files_to_copy = wed_files_to_copy
-    # files_to_copy = [ "ml" ]
+    files_to_copy = fri_files_to_copy
+    # files_to_copy = [ "ml" ] # usen esto para ver uno en particular
     sections_text = ""
     for f in files_to_copy:
         sections_text += "<section data-markdown='lib/" + f + ".md' " + \
