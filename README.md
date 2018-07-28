@@ -58,8 +58,14 @@ Aplicación a aprendizaje de máquina: redes neuronales, inferencia, entrenamiento
 
 Aplicación a rendering: técnicas, color, etc.
 
+- [vcpkg](vcpkg.md)
 - [Performance](performance.md)
+- [Mallas](meshes.md)
+- [Cámaras](camaras.md)
 - [Dispositivos Móbiles](mobile.md)
+- [Escenas](escenas.md)
+- [Trabajo Práctico](tp.md)
+
 
 ## Preparado de presentación
 
