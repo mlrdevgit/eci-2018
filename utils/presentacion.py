@@ -18,7 +18,8 @@ from tempfile import gettempdir
 # edit c:\work\sto\src\projects\impossible-channel\shader.glsl
 # use play() and pause() in FF JavaScript console
 
-present_work_dir = gettempdir()
+# present_work_dir = gettempdir()
+present_work_dir = os.environ['USERPROFILE']
 present_work_dir = os.path.join(present_work_dir, "eci")
 reveal_js_dir = os.path.join(present_work_dir, "reveal.js")
 mathjax_dir = os.path.join(reveal_js_dir, "lib", "MathJax")
