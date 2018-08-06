@@ -22,7 +22,7 @@ Realizar una visualización de un cuarto cerrado con el techo a 3 metros, con
   20cm sobre nivel visión (elijan).
 - Escritorio de 0.5m x 1m, 1m de altura.
 - Lámpara sobre escritorio, bombita de luz blanca.
-- Luz en el centro de la habitación.
+- Luz en el centro de la habitación (techo).
 
 Notas:
 
@@ -35,6 +35,8 @@ por 1m alto. Cualquiera de las dos configuraciones es aceptada.
 En el medio, un escritorio de 1 metro de largo, medio de ancho y 1 metro de
 altura, con una lámpara. La lámpara tiene una bombita de luz blanca siempre
 prendida en su interior, y una pantalla amarilla.
+
+La segunda fuente de luz está en el techo, en el centro de la habitación. Pueden elegir el tipo de luz y lámpara que prefieran.
 
 
 ## Interacción
